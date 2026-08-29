@@ -555,8 +555,11 @@ main {
 }
 
 .section {
-    padding-block: var(--sec-y);
     position: relative;
+}
+
+[data-theme="light"] .ax-plate {
+    background: rgb(217 217 217 / 52%);
 }
 
 .section+.section {
@@ -661,16 +664,6 @@ h4 {
 #about .sec-head .mono-label {
     display: none;
 }
-[data-theme="light"] .sec-head.center.in em {
-    color: #4c0585;
-    font-size: clamp(3.5rem, 4vw, 4.4rem);
-    font-weight: 900;
-}
-
-.sec-head.center.in em {
-    font-size: clamp(3.5rem, 4vw, 4.4rem);
-    font-weight: 900;
-}
 
 [data-theme="light"] #skills .sec-title em {
     color: #4c0585;
@@ -692,11 +685,9 @@ h4 {
 }
 [data-theme="light"] #testimonials .sec-title em {
     color: #4c0585;
-    font-size: clamp(3.5rem, 5.5vw, 7.5rem);
     font-weight: 900;
 }
 #testimonials .sec-title em {
-    font-size: clamp(3.5rem, 5.5vw, 7.5rem);
     font-weight: 900;
 }
 [data-theme="light"] #services .sec-title em {
@@ -1339,6 +1330,11 @@ h4 {
     color: var(--accent-2);
 }
 
+[data-theme="dark"] .drawer-links a:hover .idx,
+[data-theme="dark"] .drawer-links a.active .idx {
+    color: #c9f24d;
+}
+
 .drawer-links a:hover .go,
 .drawer-links a:focus-visible .go {
     opacity: 1;
@@ -1412,6 +1408,10 @@ h4 {
     border-color: var(--accent-line);
     background: var(--accent-dim);
     transform: translateY(-3px);
+}
+
+[data-theme="dark"] #site-footer .social-row a:hover {
+    color: #c9f24d;
 }
 
 /* ==========================================================================
@@ -2518,7 +2518,8 @@ h4 {
     align-items: center;
     justify-content: center;
     gap: .7rem;
-    margin-top: 2.4rem;
+    margin-top: 2.5rem;
+    padding-bottom: 2.5rem;
 }
 
 .proj-count {
@@ -4021,6 +4022,25 @@ background: var(--surface);
         font-size: 15px;
     }
 
+    .section {
+        padding-block: clamp(3rem, 8vh, 4.5rem);
+    }
+
+    .sec-head,
+    .sec-head.center {
+        margin-inline: auto;
+        text-align: center;
+        justify-items: center;
+    }
+
+    .page-top {
+        padding-bottom: 0;
+    }
+
+    .about-x {
+        padding-top: clamp(1rem, 4vh, 2.2rem);
+    }
+
     html {
         scroll-padding-top: 78px;
     }
@@ -4095,6 +4115,45 @@ background: var(--surface);
 
     #site-footer .social-row {
         justify-content: center;
+    }
+}
+
+@media (min-width: 621px) {
+    .section {
+        padding-block: var(--sec-y);
+    }
+
+    #hero {
+        padding-block: clamp(5.5rem, 8vh, 7rem) clamp(3rem, 8vh, 5rem);
+    }
+
+    .page-top {
+        padding-block: 0;
+        padding-top: calc(var(--sec-y) + 3.4rem);
+    }
+
+    .sec-head,
+    .sec-head.center {
+        margin-inline: auto;
+        text-align: center;
+        justify-items: center;
+    }
+
+    #contact .sec-head,
+    #contact .sec-head.center,
+    #projects .sec-head,
+    #projects .sec-head.center,
+    #experience .sec-head,
+    #experience .sec-head.center,
+    .page-top .sec-head,
+    .page-top .sec-head.center {
+        margin-inline: 0;
+        text-align: left;
+        justify-items: start;
+    }
+
+    .sec-head.center .mono-label::after {
+        display: none;
     }
 }
 
@@ -4175,6 +4234,8 @@ background: var(--surface);
 .page-head h1 em {
     color: var(--accent);
     font-style: normal;
+    font-size: clamp(2.6rem, 6vw, 4.1rem);
+    font-weight: 700;
 }
 
 .page-count {

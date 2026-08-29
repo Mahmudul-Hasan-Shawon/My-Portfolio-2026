@@ -340,7 +340,7 @@
     margin: 0;
     border-radius: var(--r-lg);
     overflow: hidden;
-    aspect-ratio: 4 / 4.7;
+    aspect-ratio: 4 / 4.4;
     background: var(--surface);
     border: 1px solid var(--line);
     box-shadow: var(--card-sh);
@@ -352,10 +352,11 @@
    rate. */
 .ax-photo {
     position: absolute;
-    inset: -3.5% 0;
+    inset: 0;
     width: 100%;
-    height: 107%;
+    height: 100%;
     object-fit: cover;
+    object-position: top center;
 }
 
 .ax-void {
@@ -639,7 +640,7 @@
     }
 
     .ax-frame {
-        aspect-ratio: 4 / 3.6;
+        aspect-ratio: 4 / 4.1;
     }
 }
 
