@@ -1,0 +1,658 @@
+/* =====================================================================
+   motion.css  —  the movement layer
+   ---------------------------------------------------------------------
+   Loaded after styles.css, so everything here is an override or an
+   addition; nothing in the base sheet had to be edited.
+
+   Four jobs:
+     1. Entrances    — one shared reveal, staggered by --d from site.js
+     2. Transitions  — page-to-page, and the live-content refresh
+     3. Skeletons    — the beat between opening a project and its body
+     4. Structure    — the corrections the new section order needs
+
+   Everything is written so that removing this file leaves a working,
+   if flatter, site. Reduced-motion is honoured at the bottom.
+   ===================================================================== */
+
+:root {
+    --m-fast: .34s;
+    --m-mid: .58s;
+    --m-slow: .78s;
+    --m-ease: cubic-bezier(.16, 1, .3, 1);
+    --m-ease-soft: cubic-bezier(.33, 1, .68, 1);
+}
+
+
+/* =====================================================================
+   4 · STRUCTURE
+   Corrections the new running order needs. The old layout opened with a
+   portrait-led "about" hero, so the base sheet made #about behave like a
+   hero: no eyebrow, display type at seven rem. About is now the seventh
+   block on the page and has to sit in the same rhythm as its neighbours.
+   ===================================================================== */
+
+/* The numbered eyebrow comes back — it is how the page is counted. */
+#about .sec-head .mono-label {
+    display: inline-flex;
+}
+
+/* And the heading returns to section scale. */
+#about .sec-title em,
+[data-theme="light"] #about .sec-title em {
+    font-size: inherit;
+    font-weight: 700;
+}
+
+
+/* =====================================================================
+   5 · HERO (INTRO)
+   The portrait-led opener. Headline across the top with the name at
+   display scale, then a two-column grid: photo card, statement of
+   approach, four proof badges, the two calls to action.
+
+   Built on the existing tokens, so it repaints correctly in both themes
+   and picks up any palette change made in ⚙ Config. No new webfont: the
+   headline uses --ff-display, which is already loaded.
+   ===================================================================== */
+
+.hero-intro {
+    min-height: auto;
+    padding-block: clamp(3.5rem, 7vh, 6rem) clamp(3rem, 7vh, 5.5rem);
+    display: block;
+}
+
+.hero-intro>.shell {
+    position: relative;
+}
+
+/* ── Headline ─────────────────────────────────────────────────────────
+   "I am *Shawon*, automation engineer" — the asterisks in Intro Heading
+   become the <em>, which is the part that gets the size and the accent. */
+.hero-intro-title {
+    /* Not var(--heading): on the light palette that token is a mid lavender
+       tuned for section titles over a tinted band, and at hero scale
+       against white it reads as washed out. */
+    color: var(--text);
+    font-family: var(--ff-display);
+    font-weight: 500;
+    font-size: clamp(2rem, 4.4vw, 3.5rem);
+    line-height: 1.14;
+    letter-spacing: -.015em;
+    margin: clamp(1.2rem, 2.5vw, 2.2rem) 0 clamp(2.2rem, 4vw, 3.4rem);
+    max-width: 20ch;
+    text-wrap: balance;
+}
+
+.hero-intro-title em {
+    font-style: normal;
+    font-weight: 800;
+    color: var(--accent);
+    /* Set against the line rather than in absolute terms, so the name
+       scales with the headline at every breakpoint instead of needing
+       its own clamp. */
+    font-size: 1.55em;
+    line-height: .9;
+    letter-spacing: -.03em;
+}
+
+[data-theme="light"] .hero-intro-title em {
+    color: #4c0585;
+}
+
+/* ── Grid ─────────────────────────────────────────────────────────── */
+.hero-intro-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+    gap: clamp(2rem, 4vw, 3.4rem);
+    align-items: start;
+}
+
+/* ── Photo card ───────────────────────────────────────────────────── */
+.photo-card {
+    position: relative;
+    margin: 0;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    aspect-ratio: 3 / 3.7;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--card-sh);
+}
+
+[data-theme="light"] .photo-card {
+    border: none;
+    background: transparent;
+    box-shadow: 0 4px 5px -2px rgba(255, 255, 255, 1);
+}
+
+.photo-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+}
+
+/* The scrim only needs to exist where the caption sits. Running it to
+   the top would grey the portrait for no reason. */
+.photo-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top,
+            rgba(0, 0, 0, .74) 0%,
+            rgba(0, 0, 0, .16) 38%,
+            rgba(0, 0, 0, 0) 62%);
+    pointer-events: none;
+}
+
+/* Light theme: swap the black bottom scrim for a short, soft white blur
+   so no dark shadow lingers over the portrait. Just a 10px band at the
+   foot, blurred. */
+[data-theme="light"] .photo-card::after {
+    inset: auto 0 0 0;
+    height: 5rem;
+    background: linear-gradient(to top, rgba(255, 255, 255, .95), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(2px);
+}
+
+.photo-card figcaption {
+    position: absolute;
+    left: clamp(1rem, 2vw, 1.4rem);
+    right: clamp(1rem, 2vw, 1.4rem);
+    bottom: clamp(1rem, 2vw, 1.4rem);
+    z-index: 2;
+    display: grid;
+    gap: .45rem;
+}
+
+/* The tag sits on the dark scrim at the foot of the portrait, so it needs
+   a colour that works against black in BOTH palettes — the light theme's
+   accent is a deep purple and disappears there. */
+.photo-tag {
+    font-family: var(--ff-mono);
+    font-weight: 600;
+    font-size: .69rem;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+[data-theme="light"] .photo-tag {
+    color: #c9a6ff;
+}
+
+.photo-name {
+    font-family: var(--ff-display);
+    font-weight: 600;
+    font-size: 1.35rem;
+    line-height: 1.1;
+    color: #fff;
+}
+
+[data-theme="light"] .photo-name {
+    color: #4c0585;
+}
+
+.photo-void {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--ff-display);
+    font-size: 4rem;
+    color: var(--accent);
+    background: var(--accent-dim);
+}
+
+/* ── Approach ─────────────────────────────────────────────────────── */
+.approach h2 {
+    font-family: var(--ff-display);
+    font-weight: 700;
+    font-size: clamp(1.4rem, 2.3vw, 1.85rem);
+    line-height: 1.15;
+    margin: 0 0 1.1rem;
+    color: var(--accent);
+}
+
+[data-theme="light"] .approach h2 {
+    color: #4c0585;
+}
+
+.approach p {
+    font-size: 1rem;
+    line-height: 1.72;
+    color: var(--muted);
+    margin: 0 0 1rem;
+    max-width: 62ch;
+}
+
+.approach p b,
+.approach p strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* ── Badges ───────────────────────────────────────────────────────── */
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+    margin: 1.7rem 0 2rem;
+    max-width: 44rem;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .85rem 1rem;
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+}
+
+.badge-tick {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: .6rem;
+}
+
+.badge span:last-child {
+    font-size: .875rem;
+    line-height: 1.35;
+    color: var(--text);
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 1020px) {
+    .hero-intro-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-card {
+        aspect-ratio: 4 / 3.4;
+        max-width: 26rem;
+    }
+}
+
+@media (max-width: 620px) {
+    .hero-intro-title {
+        max-width: none;
+    }
+
+    .hero-intro-title em {
+        font-size: 1.4em;
+    }
+
+    .badge-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .photo-card {
+        max-width: none;
+        aspect-ratio: 4 / 4.2;
+    }
+}
+
+
+/* =====================================================================
+   6 · ABOUT
+   The counterpart to the hero, and deliberately built from a different
+   set of parts: a layered media column with glass plates reading over
+   it, a story, a numbered account of the work, a closing line.
+
+   The glass is real backdrop-filter where it exists and a solid surface
+   where it does not — see the @supports block at the end of this
+   section. Nothing here is load-bearing for legibility: every plate has
+   its own background, so an unsupported filter costs texture, not text.
+   ===================================================================== */
+
+.about-x {
+    position: relative;
+    overflow: clip;
+}
+
+.about-x-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+    gap: clamp(2rem, 4.5vw, 4rem);
+    align-items: start;
+}
+
+/* ── Media column ─────────────────────────────────────────────────── */
+.ax-media {
+    position: sticky;
+    top: calc(var(--hdr-h, 5rem) + 2rem);
+    display: grid;
+    gap: 1rem;
+}
+
+.ax-frame {
+    position: relative;
+    margin: 0;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    aspect-ratio: 4 / 4.7;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    box-shadow: var(--card-sh);
+    isolation: isolate;
+}
+
+/* The drift, written by axFrame(). A transition would fight the scroll,
+   so the value is applied raw and the smoothing comes from the frame
+   rate. */
+.ax-photo {
+    position: absolute;
+    inset: -3.5% 0;
+    width: 100%;
+    height: 107%;
+    object-fit: cover;
+}
+
+.ax-void {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-family: var(--ff-display);
+    font-size: 4.5rem;
+    color: var(--accent);
+    background: var(--accent-dim);
+}
+
+/* A soft accent bloom behind the plate, so the glass has something to
+   refract rather than sitting on flat photography. */
+.ax-glow {
+    position: absolute;
+    z-index: 1;
+    left: -20%;
+    right: -20%;
+    bottom: -35%;
+    height: 70%;
+    background: radial-gradient(60% 60% at 50% 60%, var(--accent-dim), transparent 70%);
+    filter: blur(28px);
+    opacity: .9;
+    pointer-events: none;
+}
+
+/* ── Glass plate ──────────────────────────────────────────────────── */
+.ax-plate {
+    position: absolute;
+    z-index: 2;
+    left: .8rem;
+    right: .8rem;
+    bottom: .8rem;
+    display: grid;
+    gap: .3rem;
+    padding: .9rem 1rem;
+    border-radius: var(--r);
+    background: rgba(20, 22, 26, .52);
+    border: 1px solid rgba(255, 255, 255, .16);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 10px 30px -12px rgba(0, 0, 0, .5);
+    color: #fff;
+}
+
+.ax-plate b {
+    font-family: var(--ff-display);
+    font-size: 1.02rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.ax-plate small {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .78rem;
+    opacity: .78;
+}
+
+.ax-live {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    font-family: var(--ff-mono);
+    font-size: .64rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+[data-theme="light"] .ax-live {
+    color: #d7b8ff;
+}
+
+/* ── Figures ──────────────────────────────────────────────────────── */
+.ax-facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .65rem;
+}
+
+.ax-fact {
+    padding: .8rem .9rem;
+    border-radius: var(--r-sm);
+    background: color-mix(in srgb, var(--surface) 72%, transparent);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.ax-fact b {
+    display: block;
+    font-family: var(--ff-display);
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--accent);
+}
+
+[data-theme="light"] .ax-fact b {
+    color: #4c0585;
+}
+
+.ax-fact span {
+    display: block;
+    margin-top: .3rem;
+    font-size: .74rem;
+    line-height: 1.35;
+    color: var(--muted);
+}
+
+/* ── Story ────────────────────────────────────────────────────────── */
+.ax-lead {
+    font-family: var(--ff-display);
+    font-size: clamp(1.15rem, 1.9vw, 1.5rem);
+    font-weight: 500;
+    line-height: 1.45;
+    letter-spacing: -.01em;
+    color: var(--text);
+    margin: 0 0 1.4rem;
+    max-width: 40ch;
+    text-wrap: pretty;
+}
+
+.ax-lead em {
+    font-style: normal;
+    color: var(--accent);
+}
+
+[data-theme="light"] .ax-lead em {
+    color: #4c0585;
+}
+
+.ax-story p {
+    font-size: .98rem;
+    line-height: 1.75;
+    color: var(--muted);
+    margin: 0 0 .95rem;
+    max-width: 64ch;
+}
+
+.ax-story strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* ── Process ──────────────────────────────────────────────────────── */
+.ax-process {
+    margin: 2.2rem 0 1.8rem;
+    padding-top: 1.6rem;
+    border-top: 1px solid var(--line-soft);
+}
+
+.ax-process h3 {
+    font-family: var(--ff-mono);
+    font-size: .72rem;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin: 0 0 1.1rem;
+}
+
+.ax-process ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: .5rem;
+}
+
+.ax-process li {
+    display: flex;
+    gap: 1rem;
+    padding: .85rem .95rem;
+    border-radius: var(--r-sm);
+    border: 1px solid transparent;
+}
+
+.ax-step {
+    flex: none;
+    font-family: var(--ff-mono);
+    font-size: .75rem;
+    font-weight: 700;
+    line-height: 1.7;
+    color: var(--accent);
+    opacity: .8;
+}
+
+[data-theme="light"] .ax-step {
+    color: #4c0585;
+}
+
+.ax-process li b {
+    display: block;
+    font-size: .95rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: .2rem;
+}
+
+.ax-process li p {
+    margin: 0;
+    font-size: .86rem;
+    line-height: 1.6;
+    color: var(--muted);
+    max-width: 56ch;
+}
+
+/* ── Closing line ─────────────────────────────────────────────────── */
+.ax-signature {
+    margin: 0 0 1.8rem;
+    padding: 1.1rem 1.3rem;
+    border-radius: var(--r);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    background: color-mix(in srgb, var(--surface) 66%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.ax-signature p {
+    margin: 0 0 .5rem;
+    font-family: var(--ff-display);
+    font-size: 1.02rem;
+    font-style: italic;
+    line-height: 1.55;
+    color: var(--text);
+}
+
+.ax-signature em {
+    font-style: normal;
+    color: var(--accent);
+}
+
+[data-theme="light"] .ax-signature em {
+    color: #4c0585;
+}
+
+.ax-signature cite {
+    font-family: var(--ff-mono);
+    font-size: .68rem;
+    font-style: normal;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--faint);
+}
+
+.ax-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .7rem;
+}
+
+/* ── Without backdrop-filter ──────────────────────────────────────── */
+/* The plates carry text, so they get a solid surface rather than a
+   translucent one that would leave the photo showing through. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+
+    .ax-plate {
+        background: rgba(16, 19, 23, .88);
+    }
+
+    .ax-fact,
+    .ax-signature {
+        background: var(--surface);
+    }
+}
+
+/* ── Responsive ───────────────────────────────────────────────────── */
+@media (max-width: 1020px) {
+    .about-x-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ax-media {
+        position: static;
+        max-width: 30rem;
+    }
+
+    .ax-frame {
+        aspect-ratio: 4 / 3.6;
+    }
+}
+
+@media (max-width: 620px) {
+    .ax-media {
+        max-width: none;
+    }
+
+    .ax-facts {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .ax-process li {
+        padding-inline: 0;
+    }
+}
