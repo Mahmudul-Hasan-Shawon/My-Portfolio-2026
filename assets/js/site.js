@@ -335,13 +335,24 @@ function parseRoute() {
     return { name: "home", slug: "" };
 }
 
+/* Per-page scroll memory: when the visitor leaves a page we remember how far
+   down they were, so the Back button (or an in-site "back" link) drops them
+   where they left off instead of snapping to the top. Keyed by pathname. */
+var SCROLL_CACHE = {};
+function pageKey() { return location.pathname + location.search; }
+
 /* Move to another page. `hash` is an optional #section to land on once the
    new page has rendered. */
 function go(url, hash, replace) {
     var full = url + (hash || "");
     if (history.pushState) {
-        if (replace) history.replaceState({}, "", full);
-        else history.pushState({}, "", full);
+        if (replace) {
+            history.replaceState({}, "", full);
+        } else {
+            /* Remember where we were before this page change. */
+            SCROLL_CACHE[pageKey()] = window.scrollY || document.documentElement.scrollTop || 0;
+            history.pushState({}, "", full);
+        }
     } else {
         location.href = full;
         return;
@@ -392,6 +403,26 @@ function paintRoute(hash) {
         var el = document.getElementById(hash.replace(/^#/, ""));
         if (el) { jumpTop(); scrollToEl(el); return; }
     }
+
+    /* Back / forward: land where the visitor left off on this page. */
+    var key = pageKey();
+    if (Object.prototype.hasOwnProperty.call(SCROLL_CACHE, key)) {
+        var saved = SCROLL_CACHE[key];
+        delete SCROLL_CACHE[key];
+        function restore() {
+            var opts = { duration: 0.9, force: true, lock: true };
+            if (LENIS) LENIS.scrollTo(saved, opts);
+            else window.scrollTo({ top: saved, behavior: "smooth" });
+        }
+        /* Images land lazily and reveals resize the page after the first
+           render, so fly to the saved spot once, then nudge it home again
+           a couple of times once the layout has settled. */
+        setTimeout(restore, 30);
+        setTimeout(restore, 300);
+        setTimeout(restore, 800);
+        return;
+    }
+
     jumpTop();
 }
 
@@ -594,6 +625,9 @@ var SEC_NUM = {};                             // section key → "[03]" label
 var PROJ_FULL = {};                           // slug → full row, once fetched
 
 function boot() {
+    /* Scroll state is handled by this app (see SCROLL_CACHE in go()), so
+       the browser's native back-button scroll restoration must not fight it. */
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     preload(40, "composing");
     applyStatic();
     hydrate();
