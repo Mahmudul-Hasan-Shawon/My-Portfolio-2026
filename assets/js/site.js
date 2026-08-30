@@ -357,10 +357,16 @@ function go(url, hash, replace) {
         location.href = full;
         return;
     }
-    enterRoute(hash);
+    enterRoute(hash, false);
 }
 
-function enterRoute(hash) {
+/* `isPop` distinguishes a genuine Back/Forward trip from an explicit
+   navigation. On a Back/Forward the hash is whatever the browser left in
+   the address bar — possibly a stale in-page anchor — so restoring the
+   exact saved scroll position wins. On an explicit navigation the hash is a
+   deliberate request (e.g. nav → home's Services section), so the section
+   wins over any leftover cached scroll. */
+function enterRoute(hash, isPop) {
     var main = document.getElementById("main");
     var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -369,13 +375,27 @@ function enterRoute(hash) {
     // cut with a soft edge, not a dissolve.
     if (main && !reduced) {
         main.classList.add("page-leaving");
-        setTimeout(function () { paintRoute(hash); }, 170);
+        setTimeout(function () { paintRoute(hash, isPop); }, 170);
         return;
     }
-    paintRoute(hash);
+    paintRoute(hash, isPop);
 }
 
-function paintRoute(hash) {
+/* Glide back to a remembered scroll position. Images land lazily and reveals
+   resize the page after the first render, so fly to the saved spot once, then
+   nudge it home again a couple of times once the layout has settled. */
+function restoreScroll(saved) {
+    function restore() {
+        var opts = { duration: 0.9, force: true, lock: true };
+        if (LENIS) LENIS.scrollTo(saved, opts);
+        else window.scrollTo({ top: saved, behavior: "smooth" });
+    }
+    setTimeout(restore, 30);
+    setTimeout(restore, 300);
+    setTimeout(restore, 800);
+}
+
+function paintRoute(hash, isPop) {
     var main = document.getElementById("main");
 
     ROUTE = parseRoute();
@@ -399,31 +419,39 @@ function paintRoute(hash) {
        Force a re-measure before anything scrolls. */
     if (LENIS) LENIS.resize();
 
-    /* Back / forward: land where the visitor left off on this page.
-       Checked before the hash so a stale in-page anchor (e.g. #hero left by
-       the brand link) can't yank the visitor back to the top — the exact
-       scroll position they were at matters more than a leftover hash. */
-    var key = pageKey();
-    if (Object.prototype.hasOwnProperty.call(SCROLL_CACHE, key)) {
-        var saved = SCROLL_CACHE[key];
-        delete SCROLL_CACHE[key];
-        function restore() {
-            var opts = { duration: 0.9, force: true, lock: true };
-            if (LENIS) LENIS.scrollTo(saved, opts);
-            else window.scrollTo({ top: saved, behavior: "smooth" });
+    if (isPop) {
+        /* Back / forward: land where the visitor left off on this page.
+           Checked before the hash so a stale in-page anchor (e.g. #hero left
+           by the brand link) can't yank the visitor back to the top — the
+           exact scroll position they were at matters more than a leftover
+           hash on the address bar. */
+        var key = pageKey();
+        if (Object.prototype.hasOwnProperty.call(SCROLL_CACHE, key)) {
+            restoreScroll(SCROLL_CACHE[key]);
+            delete SCROLL_CACHE[key];
+            return;
         }
-        /* Images land lazily and reveals resize the page after the first
-           render, so fly to the saved spot once, then nudge it home again
-           a couple of times once the layout has settled. */
-        setTimeout(restore, 30);
-        setTimeout(restore, 300);
-        setTimeout(restore, 800);
+        if (hash) {
+            var elp = document.getElementById(hash.replace(/^#/, ""));
+            if (elp) { jumpTop(); scrollToEl(elp); return; }
+        }
+        jumpTop();
         return;
     }
 
+    /* Explicit navigation: if a specific section was asked for, go straight
+       to it — a leftover cached scroll for this page must not override a
+       deliberate request (e.g. nav → home's Services section). */
     if (hash) {
         var el = document.getElementById(hash.replace(/^#/, ""));
         if (el) { jumpTop(); scrollToEl(el); return; }
+    }
+
+    var key2 = pageKey();
+    if (Object.prototype.hasOwnProperty.call(SCROLL_CACHE, key2)) {
+        restoreScroll(SCROLL_CACHE[key2]);
+        delete SCROLL_CACHE[key2];
+        return;
     }
 
     jumpTop();
@@ -3850,7 +3878,7 @@ document.addEventListener("click", function (e) {
 
 /* Back / forward buttons. */
 window.addEventListener("popstate", function () {
-    enterRoute(location.hash);
+    enterRoute(location.hash, true);
 });
 
 document.addEventListener("keydown", function (e) {
