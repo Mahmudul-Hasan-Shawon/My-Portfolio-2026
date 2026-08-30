@@ -399,12 +399,10 @@ function paintRoute(hash) {
        Force a re-measure before anything scrolls. */
     if (LENIS) LENIS.resize();
 
-    if (hash) {
-        var el = document.getElementById(hash.replace(/^#/, ""));
-        if (el) { jumpTop(); scrollToEl(el); return; }
-    }
-
-    /* Back / forward: land where the visitor left off on this page. */
+    /* Back / forward: land where the visitor left off on this page.
+       Checked before the hash so a stale in-page anchor (e.g. #hero left by
+       the brand link) can't yank the visitor back to the top — the exact
+       scroll position they were at matters more than a leftover hash. */
     var key = pageKey();
     if (Object.prototype.hasOwnProperty.call(SCROLL_CACHE, key)) {
         var saved = SCROLL_CACHE[key];
@@ -421,6 +419,11 @@ function paintRoute(hash) {
         setTimeout(restore, 300);
         setTimeout(restore, 800);
         return;
+    }
+
+    if (hash) {
+        var el = document.getElementById(hash.replace(/^#/, ""));
+        if (el) { jumpTop(); scrollToEl(el); return; }
     }
 
     jumpTop();
