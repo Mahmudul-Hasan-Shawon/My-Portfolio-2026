@@ -366,7 +366,20 @@ window.SITE_CONTENT = {
       "icon": "fa-solid fa-bag-shopping",
       "items": "WooCommerce\nShopify\nPayment gateways\nOrder pipelines",
       "level": 82
+    },
+    {
+    "category": "API Integration",
+    "icon": "fa-solid fa-plug",
+    "items": "REST APIs\nWebhooks\nOAuth 2.0\nThird-Party Services",
+    "level": 91
+    },
+    {
+      "category": "Business Systems",
+      "icon": "fa-solid fa-sitemap",
+      "items": "ERP Systems\nInventory Management\nWorkflow Optimization\nProcess Automation",
+      "level": 89
     }
+        
   ],
   "tools": [
     {
