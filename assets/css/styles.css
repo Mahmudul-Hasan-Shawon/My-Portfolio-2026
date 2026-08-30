@@ -1799,7 +1799,7 @@ h4 {
 }
 
 .stat {
-    background: #1a1e24;
+    background: #101317;
     padding: clamp(1.4rem, 3vw, 2.1rem);
     display: grid;
     gap: .35rem;
