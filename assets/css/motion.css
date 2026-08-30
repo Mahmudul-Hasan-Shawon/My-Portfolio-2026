@@ -113,16 +113,16 @@
     margin: 0;
     border-radius: var(--r-lg);
     overflow: hidden;
-    aspect-ratio: 3 / 3.7;
-    background: var(--surface);
-    border: 1px solid var(--line);
-    box-shadow: var(--card-sh);
+    /* aspect-ratio: 3 / 3.7; */
+    /* background: var(--surface); */
+    /* border: 1px solid var(--line); */
+    /* box-shadow: var(--card-sh); */
 }
 
 [data-theme="light"] .photo-card {
     border: none;
     background: transparent;
-    box-shadow: 0 4px 5px -2px rgba(255, 255, 255, 1);
+    /* box-shadow: 0 4px 5px -2px rgba(255, 255, 255, 1); */
 }
 
 .photo-card img {
