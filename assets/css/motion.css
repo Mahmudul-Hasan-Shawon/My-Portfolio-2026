@@ -349,7 +349,7 @@
     overflow: hidden;
     aspect-ratio: 4 / 4.4;
     background: var(--surface);
-    border: 1px solid var(--line);
+    /* border: 1px solid var(--line); */
     box-shadow: var(--card-sh);
     isolation: isolate;
 }

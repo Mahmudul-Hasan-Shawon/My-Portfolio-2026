@@ -3279,6 +3279,7 @@ h4 {
         radial-gradient(22rem 11rem at 20% 0%, var(--accent-dim), transparent 70%),
         var(--surface-2);
     box-shadow: 0 14px 36px -14px rgba(76, 5, 133, .35);
+    /* box-shadow: var(--card-sh); */
 }
 
 .faq-cta h3 {
@@ -3333,6 +3334,7 @@ h4 {
     border-radius: var(--r-sm);
     background: var(--surface);
     transition: all .3s var(--ease);
+    box-shadow: var(--card-sh);
 }
 
 a.contact-line:hover {
@@ -3397,6 +3399,7 @@ a.contact-line:hover {
 background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--r-lg);
+    box-shadow: var(--card-sh);
 }
 
 [data-theme="light"] .form-card {
