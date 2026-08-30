@@ -664,3 +664,104 @@
         padding-inline: 0;
     }
 }
+
+
+/* =====================================================================
+   6 · FAQ CTA — animated glowing beam
+   A multi-colour wave sweeps around the CTA card's border ring, with a
+   soft blurred aura trailing it. ::before is the crisp ring, ::after the
+   glow; the two rotate together around the shared --faq-angle.
+   ===================================================================== */
+
+@property --faq-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
+/* The CTA gets its own little palette for the beam waves; the light
+   theme swap tells it to use softer colours that read on the pale card. */
+.faq-cta {
+    --faq-c1: #4de0c4;
+    --faq-c2: var(--accent);
+    --faq-c3: #f4b3ff;
+    position: relative;
+    isolation: isolate;
+}
+
+/* If a browser can't do @property, the angle never advances — fall back
+   to a static beam rather than a broken frame. */
+.faq-cta::before,
+.faq-cta::after {
+    content: "";
+    position: absolute;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+        from var(--faq-angle),
+        transparent 0deg 212deg,
+        var(--faq-c3) 234deg,
+        var(--faq-c2) 262deg,
+        var(--faq-c1) 292deg,
+        var(--faq-c2) 316deg,
+        transparent 342deg 360deg
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: faq-border-beam 4s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* crisp ring */
+.faq-cta::before {
+    inset: 0;
+}
+
+/* the glow — sits inside the border ring and bleeds inward across the card */
+.faq-cta::after {
+    inset: 1px;
+    filter: blur(14px);
+    opacity: .75;
+    z-index: -1;
+}
+
+.faq-cta > * {
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes faq-border-beam {
+    to {
+        --faq-angle: 360deg;
+    }
+}
+
+/* light theme — bright pastel wave tuned to the pale card */
+[data-theme="light"] .faq-cta {
+    --faq-c1: #2fb6a6;
+    --faq-c2: #7a3bb8;
+    --faq-c3: #d04fa8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .faq-cta::before,
+    .faq-cta::after {
+        animation: none;
+        background: conic-gradient(
+            from 292deg,
+            transparent 0deg 212deg,
+            var(--faq-c3) 234deg,
+            var(--faq-c2) 262deg,
+            var(--faq-c1) 292deg,
+            var(--faq-c2) 316deg,
+            transparent 342deg 360deg
+        );
+    }
+
+    .faq-cta::after {
+        opacity: .35;
+    }
+}
