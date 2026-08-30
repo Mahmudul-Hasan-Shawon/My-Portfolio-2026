@@ -133,6 +133,13 @@
     display: block;
 }
 
+/* Light theme: the portrait is a transparent cutout, so a solid white
+   rim around the photo ties it together with the white-blur band at the
+   foot — without it the floating edge shows through on light backgrounds. */
+[data-theme="light"] .photo-card img {
+    border: 3px solid #fff;
+}
+
 /* The scrim only needs to exist where the caption sits. Running it to
    the top would grey the portrait for no reason. */
 .photo-card::after {
