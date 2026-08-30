@@ -28,8 +28,8 @@ window.SITE_CONTENT = {
     "metaDescription": "Custom automation, Google Apps Script and web scraping. I turn manual work into systems that run themselves.",
     "metaKeywords": "automation, google apps script, web scraping, chrome extension",
     "author": "Mahmudul Hasan Shawon",
-    "siteUrl": "https://shawon7.pages.dev/",
-    "ogImageUrl": "https://shawon7.pages.dev/assets/images/shan_2.jpg",
+    "siteUrl": "https://mhshan.pages.dev",
+    "ogImageUrl": "https://mhshan.pages.dev/assets/images/shan_2.jpg",
     "faviconUrl": "",
     "heroEyebrow": "Automation Engineer",
     "heroTitle": "Turn repetitive tasks into *Smart systems that scale*",
@@ -115,7 +115,7 @@ window.SITE_CONTENT = {
     "footerTagline": "code · design · automation",
     "copyrightText": "© 2026 — Shawon. All rights reserved.",
     "whatsAppNumber": "+88 01874460244",
-    "ogImage": "https://shawon7.pages.dev/assets/images/shan_2.jpg",
+    "ogImage": "https://mhshan.pages.dev/assets/images/shan_2.jpg",
     "aboutImage": "/assets/images/shan_2.png"
   },
   "about": {
