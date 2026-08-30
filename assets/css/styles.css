@@ -665,6 +665,16 @@ h4 {
     display: none;
 }
 
+[data-theme="light"] #video .sec-title em {
+    font-size: clamp(3.5rem, 5.5vw, 4.4rem);
+    color: #4c0585;
+    font-weight: 900;
+}
+#video .sec-title em {
+    font-size: clamp(3.5rem, 5.5vw, 4rem);
+    font-weight: 900;
+}
+
 [data-theme="light"] #skills .sec-title em {
     color: #4c0585;
     font-size: clamp(3.5rem, 4vw, 7.5rem);
@@ -684,10 +694,12 @@ h4 {
     font-weight: 900;
 }
 [data-theme="light"] #testimonials .sec-title em {
+    font-size: clamp(3.5rem, 5.5vw, 7.5rem);
     color: #4c0585;
     font-weight: 900;
 }
 #testimonials .sec-title em {
+    font-size: clamp(3.5rem, 5.5vw, 7.5rem);
     font-weight: 900;
 }
 [data-theme="light"] #services .sec-title em {
