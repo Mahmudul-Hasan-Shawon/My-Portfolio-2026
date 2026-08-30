@@ -72,9 +72,9 @@
     /* Not var(--heading): on the light palette that token is a mid lavender
        tuned for section titles over a tinted band, and at hero scale
        against white it reads as washed out. */
-    color: var(--text);
+    color: var(--faint);
     font-family: var(--ff-display);
-    font-weight: 500;
+    font-weight: 700;
     font-size: clamp(2rem, 4.4vw, 3.5rem);
     line-height: 1.14;
     letter-spacing: -.015em;
