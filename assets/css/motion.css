@@ -137,7 +137,7 @@
    rim around the photo ties it together with the white-blur band at the
    foot — without it the floating edge shows through on light backgrounds. */
 [data-theme="light"] .photo-card img {
-    border: 3px solid #fff;
+    border-bottom: 2px solid #fff;
 }
 
 /* The scrim only needs to exist where the caption sits. Running it to
@@ -160,7 +160,7 @@
     inset: auto 0 0 0;
     height: 5rem;
     background: linear-gradient(to top, rgba(255, 255, 255, .95), rgba(255, 255, 255, 0));
-    backdrop-filter: blur(2px);
+    /* backdrop-filter: blur(2px); */
 }
 
 .photo-card figcaption {
