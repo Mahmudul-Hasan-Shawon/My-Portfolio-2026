@@ -4395,6 +4395,13 @@ background: var(--surface);
 }
 
 @media (max-width: 620px) {
+    /* Drop the theme-specific title size on small screens; the shared
+       .page-head h1 clamp (2.1–3.4rem) owns the mobile scale instead. */
+    [data-theme="light"] .proj-page .pp-head h1,
+    [data-theme="dark"] .proj-page .pp-head h1 {
+        font-size: clamp(2.1rem, 5vw, 3.4rem);
+    }
+
     .proj-pager {
         grid-template-columns: 1fr;
     }
