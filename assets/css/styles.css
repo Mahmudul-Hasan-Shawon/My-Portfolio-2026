@@ -2427,7 +2427,19 @@ h4 {
     position: relative;
     aspect-ratio: 16/10;
     overflow: hidden;
-    background: var(--surface-2);
+    /* Match the body's surface so the rounding seam at the thumb/body
+       boundary can't show as an off-colour hairline. */
+    background: var(--surface);
+}
+
+/* Same seam fix restated for the dark palette (the rule above already uses
+   --surface, which resolves per theme; this makes the intent explicit). */
+[data-theme="dark"] .proj-thumb {
+    background: var(--surface);
+}
+
+[data-theme="dark"] .proj-thumb img {
+    border-bottom: 1px solid #000;
 }
 
 .proj-thumb img {
