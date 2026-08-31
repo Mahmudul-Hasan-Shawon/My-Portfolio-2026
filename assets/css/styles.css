@@ -4366,6 +4366,7 @@ background: var(--surface);
     gap: 1rem;
     margin-top: 3.2rem;
     padding-top: 1.8rem;
+    padding-bottom: 3.4rem;
 }
 
 .pager-link {
