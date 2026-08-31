@@ -41,6 +41,10 @@
     --accent-2: #FF7A45;
     --accent-2-dim: rgba(255, 122, 69, .12);
 
+    /* ── Footer glass glows ──────────────────────────────── */
+    --foot-glow-a: rgba(201, 242, 77, .14);
+    --foot-glow-b: rgba(255, 122, 69, .1);
+
     /* ── Semantic ────────────────────────────────────────── */
     --ok: #4ADE80;
     --warn: #FBBF24;
@@ -104,6 +108,8 @@
     --accent-line: rgba(76, 5, 133, .24);
     --accent-2: #9a5fd0;
     --accent-2-dim: rgba(154, 95, 208, .12);
+    --foot-glow-a: rgba(219, 181, 238, .42);
+    --foot-glow-b: rgba(154, 95, 208, .26);
     --sh: 0 18px 40px -24px rgba(76, 5, 133, .22);
     --sh-lg: 0 40px 80px -44px rgba(76, 5, 133, .28);
 }
@@ -3554,8 +3560,42 @@ background: var(--surface);
 #site-footer {
     position: relative;
     z-index: 2;
-    background: var(--bg-2);
+    /* Frosted pane: translucent surface + blurred backdrop. The radial glow
+       piles are baked into the background list so they sit ON the glass and
+       always render, with centers placed inside the footer where they'll read. */
+    background:
+        radial-gradient(30rem 16rem at 8% -2%, var(--foot-glow-a), transparent 60%),
+        radial-gradient(34rem 18rem at 92% 100%, var(--foot-glow-b), transparent 62%),
+        color-mix(in srgb, var(--surface) 55%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    backdrop-filter: blur(18px) saturate(160%);
+    border-top: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
     padding-block: clamp(2.4rem, 5vw, 3.6rem) 1.4rem;
+    isolation: isolate;
+}
+
+/* Glass edge: a hairline of accent light bleeding off the top seam. */
+#site-footer::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 8%;
+    right: 8%;
+    z-index: -1;
+    height: 1px;
+    pointer-events: none;
+    background: linear-gradient(90deg, transparent, var(--accent-line), transparent);
+    opacity: .6;
+}
+
+/* On paper the dims are already brighter; nudge the tint up so the glass
+   doesn't vanish against a white page. */
+[data-theme="light"] #site-footer {
+    background:
+        radial-gradient(30rem 16rem at 8% -2%, var(--foot-glow-a), transparent 55%),
+        radial-gradient(34rem 18rem at 92% 100%, var(--foot-glow-b), transparent 58%),
+        color-mix(in srgb, var(--surface) 48%, transparent);
+    border-top-color: color-mix(in srgb, var(--line) 75%, transparent);
 }
 
 .foot-top {
@@ -4139,6 +4179,17 @@ background: var(--surface);
 
     #site-footer .social-row {
         justify-content: center;
+    }
+
+    /* Dial the footer glow back on narrow screens: tighter, lower-alpha
+       glows over a more opaque pane so it doesn't read as heavy shadow. */
+    #site-footer {
+        background:
+            radial-gradient(18rem 12rem at 6% 4%, var(--foot-glow-a), transparent 58%),
+            radial-gradient(20rem 13rem at 94% 96%, var(--foot-glow-b), transparent 60%),
+            color-mix(in srgb, var(--surface) 68%, transparent);
+        -webkit-backdrop-filter: blur(10px) saturate(140%);
+        backdrop-filter: blur(10px) saturate(140%);
     }
 }
 

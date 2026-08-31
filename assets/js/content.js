@@ -16,7 +16,7 @@ window.SITE_CONTENT = {
   "config": {
     "sectionVisibility": "See 🧩 Sections",
     "siteTitle": "Shawon | Automation Engineer",
-    "brandName": "Mahmudul Hasan",
+    "brandName": "Mahmudul Hasan Shawon",
     "brandMark": "SHAN",
     "brandSub": "code · automate · scale",
     "logoImageUrl": "/assets/Logo/S.svg",
