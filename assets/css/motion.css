@@ -307,6 +307,17 @@
         max-width: none;
         aspect-ratio: 4 / 4.2;
     }
+
+    /* The approach copy stacks under the photo card on small screens, so a
+       chunk of it sits out of view at boot and stays hidden (opacity 0)
+       until the scroll observer fires. Make it visible up front — essential
+       copy shouldn't be scroll-gated. */
+    .hero-intro .approach {
+        opacity: 1;
+        transform: none;
+        filter: none;
+        transition: none;
+    }
 }
 
 
